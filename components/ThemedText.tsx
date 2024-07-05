@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   'text2xl': {
     fontSize: 24,
-    lineHeight: 30,
+    lineHeight: 32,
   },
   'textXl': {
     fontSize: 20,
