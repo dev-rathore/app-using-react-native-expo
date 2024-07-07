@@ -18,7 +18,7 @@ const HomeLayout = () => {
         name="infinite-scroll-screen"
         options={{
           headerBackTitleVisible: false,
-          title: '',
+          title: 'Infinite Scroll',
         }}
       />
     </Stack>

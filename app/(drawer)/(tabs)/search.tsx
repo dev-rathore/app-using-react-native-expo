@@ -6,66 +6,8 @@ import { ThemedView } from '@/components/ThemedView';
 import AppLayout from '@/components/app-layout/app-layout';
 import { ThemedText } from '@/components/ThemedText';
 import ThemedTextInput from '@/components/text-input/text-input';
-import { Colors } from '@/constants/Colors';
-
-interface Pokemon {
-  abilities: string[];
-  height: number;
-  image: string;
-  name: string;
-  type: string;
-  url: string;
-  weight: number;
-}
-
-const PokemonCard: React.FC<{ pokemon: Pokemon }> = ({ pokemon }) => {
-  return (
-    <ThemedView
-      darkColor={Colors.common.gray300}
-      style={styles.card}
-    >
-      <Image
-        source={{ uri: pokemon.image }}
-        style={styles.cardImage}
-      />
-      <ThemedText style={styles.cardTitle} type='textLg' fontWeight='fontBold'>
-        {pokemon.name.slice(0, 1).toUpperCase() + pokemon.name.slice(1)}
-      </ThemedText>
-      <ThemedView
-        darkColor={Colors.common.gray300}
-        style={styles.cardRow}
-      >
-        <ThemedText fontWeight='fontMedium' style={styles.cardRowItem} type='textSm'>Type: </ThemedText>
-        <ThemedText style={styles.cardRowItem} type='textSm'>{pokemon.type}</ThemedText>
-      </ThemedView>
-      <ThemedView
-        darkColor={Colors.common.gray300}
-        style={styles.cardRow}
-      >
-        <ThemedText fontWeight='fontMedium' style={styles.cardRowItem} type='textSm'>Weight: </ThemedText>
-        <ThemedText style={styles.cardRowItem} type='textSm'>{pokemon.weight} lbs</ThemedText>
-      </ThemedView>
-      <ThemedView
-        darkColor={Colors.common.gray300}
-        style={styles.cardRow}
-      >
-        <ThemedText fontWeight='fontMedium' style={styles.cardRowItem} type='textSm'>Height: </ThemedText>
-        <ThemedText style={styles.cardRowItem} type='textSm'>{pokemon.height * 10} cm</ThemedText>
-      </ThemedView>
-      <ThemedView
-        darkColor={Colors.common.gray300}
-        style={{
-          flexDirection: 'row',
-        }}
-      >
-        <ThemedText type='textSm'>
-          <ThemedText fontWeight='fontMedium'>Abilities: </ThemedText>
-          {pokemon.abilities.join(', ')}
-        </ThemedText>
-      </ThemedView>
-    </ThemedView>
-  );
-};
+import PokemonCard, { Pokemon } from '@/components/card/pokemon-card';
+import { getPokemonDetails } from '@/services/pokemon-service';
 
 const TabTwoScreen: React.FC = () => {
   const [query, setQuery] = useState<string>('');
@@ -82,17 +24,7 @@ const TabTwoScreen: React.FC = () => {
           name: string;
           url: string,
         }) => {
-          const pokemonDetails = await axios.get(pokemon.url);
-
-          return {
-            abilities: pokemonDetails.data.abilities.map((ability: { ability: { name: string } }) => ability.ability.name),            
-            height: pokemonDetails.data.height,
-            image: pokemonDetails.data.sprites.other['official-artwork'].front_default,
-            name: pokemon.name,
-            type: pokemonDetails.data.types[0].type.name,
-            url: pokemon.url,
-            weight: pokemonDetails.data.weight,
-          };
+          return getPokemonDetails(pokemon);
         })
       );
       setData(results);
@@ -113,16 +45,7 @@ const TabTwoScreen: React.FC = () => {
           .filter((pokemon: { name: string; url: string }) => pokemon.name.includes(query.toLowerCase()))
           .slice(0, 20)
           .map(async (pokemon: { name: string; url: string }) => {
-            const pokemonDetails = await axios.get(pokemon.url);
-            return {
-              abilities: pokemonDetails.data.abilities.map((ability: { ability: { name: string } }) => ability.ability.name),
-              height: pokemonDetails.data.height,
-              image: pokemonDetails.data.sprites.other['official-artwork'].front_default,
-              name: pokemon.name,
-              type: pokemonDetails.data.types[0].type.name,
-              url: pokemon.url,
-              weight: pokemonDetails.data.weight,
-            };
+            return getPokemonDetails(pokemon);
           })
       );
       setFilteredData(results);
@@ -170,8 +93,8 @@ const TabTwoScreen: React.FC = () => {
             columnWrapperStyle={{
               justifyContent: 'space-between',
             }}
-            ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
             data={filteredData}
+            ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
             keyExtractor={(item) => item.name}
             numColumns={2}
             renderItem={({ item }) => <PokemonCard pokemon={item} />}
@@ -188,28 +111,6 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   listContainer: {},
-  card: {
-    borderRadius: 25,
-    elevation: 1,
-    marginBottom: 10,
-    padding: 16,
-    width: '48%',
-  },
-  cardRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  cardRowItem: {
-    flexDirection: 'row',
-  },
-  cardImage: {
-    marginRight: 16,
-    minHeight: 150,
-    width: '100%',
-  },
-  cardTitle: {
-    textAlign: 'center',
-  },
 });
 
 export default TabTwoScreen;

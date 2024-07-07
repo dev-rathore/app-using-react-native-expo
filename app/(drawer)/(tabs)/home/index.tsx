@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import { DrawerActions } from '@react-navigation/native';
-import { useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/ThemedText';
@@ -15,6 +15,7 @@ import AppLayout from '@/components/app-layout/app-layout';
 import { Colors } from '@/constants/Colors';
 import UdemySection from '@/screens/home/udemy-section';
 import YoutubeSection from '@/screens/home/youtube-section';
+import ThemedTouchableHighlight from '@/components/touchable-highlight/touchable-highlight';
 
 type HomeScreenProps = {};
 
@@ -117,6 +118,19 @@ const HomeScreen:React.FC<HomeScreenProps> = () => {
       >
         <YoutubeSection />
         <UdemySection />
+        <View
+          style={{
+            paddingTop: 16,
+            paddingBottom: 32,
+          }}
+        >
+          <ThemedTouchableHighlight
+            onPress={() => router.push("/(tabs)/home/infinite-scroll-screen")}
+            alignSelf='center'
+          >
+            Infinite Scroll Screen
+          </ThemedTouchableHighlight>
+        </View>
       </ScrollView>
     </AppLayout>
   );
