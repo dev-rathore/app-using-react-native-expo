@@ -22,10 +22,18 @@
 
 ## Videos
 
-https://github.com/dev-rathore/app-using-react-native-expo/assets/59788555/e0c0554c-3fc3-47c0-b5ae-1e3ff493a269
+<div align="center">
+  <video src="https://github.com/dev-rathore/app-using-react-native-expo/assets/59788555/7a7f7ff3-f29d-44ef-9bf7-e2cf61abb4de" width="360" />
+</div>
 
-https://github.com/dev-rathore/app-using-react-native-expo/assets/59788555/343c7d7d-1819-435f-98f0-0caafe12d989
+<div align="center">
+  <video src="https://github.com/dev-rathore/app-using-react-native-expo/assets/59788555/5c31cfb0-6292-4bf7-a6bd-79b60b4417f8" width="360" />
+</div>
 
-https://github.com/dev-rathore/app-using-react-native-expo/assets/59788555/90b1e6f7-f399-46df-9845-bbbf6d3bb30f
+<div align="center">
+  <video src="https://github.com/dev-rathore/app-using-react-native-expo/assets/59788555/c5e843f9-fbbe-4b68-ad16-d0a43d6288b7" width="360" />
+</div>
 
-https://github.com/dev-rathore/app-using-react-native-expo/assets/59788555/155a0a4d-fb39-4e96-be05-c77f7d5c9815
+<div align="center">
+  <video src="https://github.com/dev-rathore/app-using-react-native-expo/assets/59788555/55c6566e-41ce-43ae-92e7-52620e23d197" width="360" />
+</div>
