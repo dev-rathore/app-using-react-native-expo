@@ -6,9 +6,13 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Alert } from 'react-native';
+import { Alert, Platform, TouchableOpacity } from 'react-native';
 import { useAuthStore } from '@/store/auth-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import ModalHeaderText from '@/screens/explore/ModalHeaderText';
+import { Colors } from '@/constants/Colors';
+import { Ionicons } from '@expo/vector-icons';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -50,20 +54,49 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack
-        screenOptions={{
-          animation: 'ios',
+      <GestureHandlerRootView
+        style={{
+          flex: 1,
         }}
       >
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="(drawer)"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+        <Stack
+          screenOptions={{
+            animation: 'ios',
+          }}
+        >
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
+          <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+          <Stack.Screen name="listing/[id]" options={{ headerTitle: '' }} />
+          <Stack.Screen
+            name="(modals)/booking"
+            options={{
+              presentation: 'transparentModal',
+              animation: 'fade',
+              headerTransparent: true,
+              headerTitle: (props) => <ModalHeaderText />,
+              headerLeft: () => (
+                Platform.OS === 'ios' && (
+                  <TouchableOpacity
+                    onPress={() => router.back()}
+                    style={{
+                      backgroundColor: '#fff',
+                      borderColor: Colors.common.gray,
+                      borderRadius: 20,
+                      borderWidth: 1,
+                      padding: 4,
+                    }}
+                  >
+                    <Ionicons name="close-outline" size={22} />
+                  </TouchableOpacity>
+                )
+              ),
+            }}
+          />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </GestureHandlerRootView>
     </ThemeProvider>
   );
 };
