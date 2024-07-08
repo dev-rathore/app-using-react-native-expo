@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Alert, Platform, TouchableOpacity } from 'react-native';
+import { Platform, TouchableOpacity } from 'react-native';
 import { useAuthStore } from '@/store/auth-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -32,16 +32,12 @@ export default function RootLayout() {
 
   useEffect(() => {
     const checkToken = async () => {
-      try {
-        const storedToken = await AsyncStorage.getItem('token');
-        if (storedToken) {
-          useAuthStore.setState({ token: storedToken });
-          router.replace('/(drawer)/(tabs)/home');
-        } else {
-          router.replace('/');
-        }
-      } catch (error) {
-        Alert.alert('Error', 'Failed to retrieve token. Please try again later.');
+      const storedToken = await AsyncStorage.getItem('token');
+      if (storedToken) {
+        useAuthStore.setState({ token: storedToken });
+        router.replace('/(drawer)/(tabs)/home');
+      } else {
+        router.replace('/');
       }
     };
 

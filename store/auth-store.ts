@@ -91,7 +91,6 @@ export const useAuthStore = create<AuthState>()(
           router.replace('/');
         } catch (error: any) {
           set({ error: error.message });
-          alert(error.message);
         }
       },
       clearError: () => {
