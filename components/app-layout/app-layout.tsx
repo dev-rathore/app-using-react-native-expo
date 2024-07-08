@@ -3,6 +3,7 @@ import { Platform, SafeAreaView, StatusBar } from "react-native";
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import { Colors } from "@/constants/Colors";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 const AppLayout: React.FC<PropsWithChildren> = ({
   children,
@@ -11,6 +12,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({
   const lightColor = Colors.light.background;
   const darkColor = Colors.dark.background;
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  const colorScheme = useColorScheme();
 
   return (
     <SafeAreaView
@@ -21,7 +23,7 @@ const AppLayout: React.FC<PropsWithChildren> = ({
       }}
     >
       {children}
-      <ExpoStatusBar style="light" />
+      <ExpoStatusBar style={colorScheme === 'light' ? "dark" : 'light'} />
     </SafeAreaView>
   );
 };

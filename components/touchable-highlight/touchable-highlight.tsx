@@ -18,7 +18,7 @@ const ThemedTouchableHighlight: React.FC<ThemedTouchableHighlightProps> = ({
         paddingHorizontal: 20,
         paddingVertical: 10,
       }}
-      underlayColor={'#6D72C3'}
+      underlayColor={Colors.common.green}
       {...props}
     >
       <Text

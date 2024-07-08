@@ -1,7 +1,10 @@
 import { Colors } from "@/constants/Colors";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { Ionicons } from "@expo/vector-icons";
+
+import { ThemedView } from "../ThemedView";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 interface YoutubeFeedCardProps {
   channel: string;
@@ -18,10 +21,12 @@ const YoutubeFeedCard: React.FC<YoutubeFeedCardProps> = ({
   title,
   views,
 }) => {
+  const colorScheme = useColorScheme();
+
   return (
-    <View
+    <ThemedView
       style={{
-        backgroundColor: Colors.common.dark,
+        backgroundColor: Colors[colorScheme].background,
         overflow: 'hidden',
       }}
     >
@@ -32,7 +37,7 @@ const YoutubeFeedCard: React.FC<YoutubeFeedCardProps> = ({
           width: '100%',
         }}
       />
-      <View
+      <ThemedView
         style={{
           flexDirection: 'row',
           gap: 10,
@@ -48,7 +53,7 @@ const YoutubeFeedCard: React.FC<YoutubeFeedCardProps> = ({
             width: 34,
           }}
         />
-        <View
+        <ThemedView
           style={{
             flex: 1,
           }}
@@ -62,7 +67,7 @@ const YoutubeFeedCard: React.FC<YoutubeFeedCardProps> = ({
           >
             {title}
           </ThemedText>
-          <View
+          <ThemedView
             style={{
               alignItems: 'center',
               flexDirection: 'row',
@@ -97,15 +102,15 @@ const YoutubeFeedCard: React.FC<YoutubeFeedCardProps> = ({
             >
               {time}
             </ThemedText>
-          </View>
-        </View>
+          </ThemedView>
+        </ThemedView>
         <Ionicons
-          color={Colors.common.white}
+          color={Colors[colorScheme].tint}
           name="ellipsis-vertical"
           size={18}
         />
-      </View>
-    </View>
+      </ThemedView>
+    </ThemedView>
   );
 };
 

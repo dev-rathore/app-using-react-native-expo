@@ -1,23 +1,26 @@
 import AppLayout from "@/components/app-layout/app-layout";
+import ThemedButton from "@/components/themed-button/themed-button";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 const GetStarted: React.FC = () => {
   const router = useRouter();
 
   return (
     <AppLayout>
-      <View style={styles.container}>
-        <Text style={styles.title}>Get Started</Text>
-        <Button
-          title='Register'
+      <ThemedView style={styles.container}>
+        <ThemedText style={styles.title} fontWeight="fontMedium">Get Started</ThemedText>
+        <ThemedButton
+          label='Register'
           onPress={() => router.push("/(auth)/register")}
         />
-        <Button
-          title='Login'
+        <ThemedButton
+          label='Login'
           onPress={() => router.push("/(auth)/login")}
         />
-      </View>
+      </ThemedView>
     </AppLayout>
   );
 };
@@ -32,7 +35,6 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    color: 'white',
     fontSize: 24,
     textAlign: "center",
   },

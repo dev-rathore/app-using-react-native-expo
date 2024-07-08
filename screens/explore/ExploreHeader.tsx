@@ -128,7 +128,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: Platform.OS === 'android' ? 146 : 139,
     paddingTop: 10,
-    elevation: 2,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 6,

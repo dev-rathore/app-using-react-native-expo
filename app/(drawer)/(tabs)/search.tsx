@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ActivityIndicator, FlatList, StyleSheet, Image } from 'react-native';
+import { View, ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 import axios from 'axios';
 import debounce from 'lodash/debounce';
 import { ThemedView } from '@/components/ThemedView';
@@ -8,12 +8,15 @@ import { ThemedText } from '@/components/ThemedText';
 import ThemedTextInput from '@/components/text-input/text-input';
 import PokemonCard, { Pokemon } from '@/components/card/pokemon-card';
 import { getPokemonDetails } from '@/services/pokemon-service';
+import { Colors } from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 const TabTwoScreen: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [data, setData] = useState<Pokemon[]>([]);
   const [filteredData, setFilteredData] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const colorScheme = useColorScheme();
 
   const fetchInitialData = async () => {
     setLoading(true);
@@ -80,13 +83,19 @@ const TabTwoScreen: React.FC = () => {
     <AppLayout>
       <ThemedView style={styles.container}>
         <ThemedText type='textXl' fontWeight='fontBold' style={{marginBottom: 16}}>Filter Search</ThemedText>
-        <ThemedTextInput
-          value={query}
-          onChangeText={onInputChange}
-          placeholder="Search Pokémon..."
-        />
+        <View
+          style={{
+            marginBottom: 20,
+          }}
+        >
+          <ThemedTextInput
+            value={query}
+            onChangeText={onInputChange}
+            placeholder="Search Pokémon..."
+          />
+        </View>
         {loading ? (
-          <ActivityIndicator size="large" color="#FFFFFF" />
+          <ActivityIndicator size="large" color={Colors[colorScheme].tint} />
         ) : (
           <FlatList
             contentContainerStyle={styles.listContainer}

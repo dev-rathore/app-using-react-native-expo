@@ -1,8 +1,7 @@
-import { View } from 'react-native';
-
 import { ThemedText } from '../ThemedText';
 import { ReactElement } from 'react';
 import { Colors } from '@/constants/Colors';
+import { ThemedView } from '../ThemedView';
 
 export type UdemyFeedCardProps = {
   actualPrice: number;
@@ -26,7 +25,7 @@ const UdemyFeedCard = ({
   totalRatings,
 }: UdemyFeedCardProps) => {
   return (
-    <View
+    <ThemedView
       style={{
         width: 230,
         gap: 2,
@@ -35,7 +34,7 @@ const UdemyFeedCard = ({
       {thumbnail}
       <ThemedText type="textBase" fontWeight='fontBold'>{title}</ThemedText>
       <ThemedText type="textXs">{instructor}</ThemedText>
-      <View
+      <ThemedView
         style={{
           alignItems: 'center',
           flexDirection: 'row',
@@ -53,8 +52,8 @@ const UdemyFeedCard = ({
         >
           ({totalRatings.toLocaleString()})
         </ThemedText>
-      </View>
-      <View
+      </ThemedView>
+      <ThemedView
         style={{
           alignItems: 'center',
           flexDirection: 'row',
@@ -73,9 +72,9 @@ const UdemyFeedCard = ({
         >
           ${actualPrice.toLocaleString()}
         </ThemedText>
-      </View>
+      </ThemedView>
       {tag ? (
-        <View
+        <ThemedView
           style={{
             alignSelf: 'flex-start',
             backgroundColor: Colors.common.green,
@@ -95,9 +94,9 @@ const UdemyFeedCard = ({
           >
             {tag}
           </ThemedText>
-        </View>
+        </ThemedView>
       ) : null}
-    </View>
+    </ThemedView>
   );
 };
 

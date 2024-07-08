@@ -2,7 +2,6 @@ import {
   ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
-  View,
 } from 'react-native';
 import { useState } from 'react';
 import { DrawerActions } from '@react-navigation/native';
@@ -16,6 +15,7 @@ import { Colors } from '@/constants/Colors';
 import UdemySection from '@/screens/home/udemy-section';
 import YoutubeSection from '@/screens/home/youtube-section';
 import ThemedTouchableHighlight from '@/components/touchable-highlight/touchable-highlight';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 type HomeScreenProps = {};
 
@@ -39,6 +39,7 @@ const HOME_SCREEN_NAV_ITEMS = [
 
 const HomeScreen:React.FC<HomeScreenProps> = () => {
   const [selectedNavItem, setSelectedNavItem] = useState<string>('All');
+  const colorScheme = useColorScheme();
 
   const navigation = useNavigation();
 
@@ -48,16 +49,17 @@ const HomeScreen:React.FC<HomeScreenProps> = () => {
         style={{
           flexDirection: 'row',
           gap: 8,
-          padding: 16,
+          paddingVertical: 16,
         }}
       >
         <TouchableWithoutFeedback
           onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
         >
-          <View
+          <ThemedView
             style={{
               borderRadius: 4,
-              paddingHorizontal: 10,
+              paddingRight: 8,
+              paddingLeft: 14,
               paddingVertical: 6,
             }}
           >
@@ -65,11 +67,11 @@ const HomeScreen:React.FC<HomeScreenProps> = () => {
               name='menu'
               size={28}
               style={[{
-                color: 'white',
+                color: Colors[colorScheme].tint,
                 marginBottom: -2,
               }]}
             />
-          </View>
+          </ThemedView>
         </TouchableWithoutFeedback>
         <ScrollView
           contentContainerStyle={{
@@ -84,10 +86,10 @@ const HomeScreen:React.FC<HomeScreenProps> = () => {
                 key={index}
                 onPress={() => setSelectedNavItem(item.label)}
               >
-                <View
+                <ThemedView
                   style={{
                     backgroundColor: selectedNavItem === item.label ? Colors.common.green : 'transparent',
-                    borderColor: selectedNavItem === item.label ? Colors.common.green : 'white',
+                    borderColor: selectedNavItem === item.label ? Colors.common.green : Colors[colorScheme].tint,
                     borderRadius: 25,
                     borderWidth: 1,
                     minWidth: 60,
@@ -97,13 +99,13 @@ const HomeScreen:React.FC<HomeScreenProps> = () => {
                 >
                   <ThemedText
                     style={{
-                      color: 'white',
+                      color: selectedNavItem === item.label ? 'white' : Colors[colorScheme].tint,
                       textAlign: 'center',
                     }}
                   >
                     {item.label}
                   </ThemedText>
-                </View>
+                </ThemedView>
               </TouchableWithoutFeedback>
             ))
           }
@@ -118,7 +120,7 @@ const HomeScreen:React.FC<HomeScreenProps> = () => {
       >
         <YoutubeSection />
         <UdemySection />
-        <View
+        <ThemedView
           style={{
             paddingTop: 16,
             paddingBottom: 32,
@@ -130,7 +132,7 @@ const HomeScreen:React.FC<HomeScreenProps> = () => {
           >
             Infinite Scroll Screen
           </ThemedTouchableHighlight>
-        </View>
+        </ThemedView>
       </ScrollView>
     </AppLayout>
   );

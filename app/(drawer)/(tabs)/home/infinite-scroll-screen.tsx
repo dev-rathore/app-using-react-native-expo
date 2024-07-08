@@ -7,12 +7,14 @@ import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import PokemonCard, { Pokemon } from '@/components/card/pokemon-card';
 import { getPokemonDetails } from '@/services/pokemon-service';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 const InfiniteScrollScreen: React.FC = () => {
   const [data, setData] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const flatListRef = useRef<FlatList>(null);
+  const colorScheme = useColorScheme();
 
   const fetchData = async (pageNumber: number) => {
     setLoading(true);
@@ -55,8 +57,8 @@ const InfiniteScrollScreen: React.FC = () => {
             justifyContent: 'space-between',
           }}
           data={data}
-          keyExtractor={(item) => item.name}
-          ListFooterComponent={loading ? <ActivityIndicator size="large" color="white" /> : null}
+          keyExtractor={(item, i) => i.toString()}
+          ListFooterComponent={loading ? <ActivityIndicator size="large" color={Colors[colorScheme].tint} /> : null}
           numColumns={2}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
@@ -79,7 +81,7 @@ const InfiniteScrollScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
   },
   listContainer: {
     paddingBottom: 20,
@@ -94,10 +96,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 20,
     width: 50,
-  },
-  scrollToTopButtonText: {
-    color: Colors.common.dark,
-    fontWeight: 'bold',
   },
 });
 

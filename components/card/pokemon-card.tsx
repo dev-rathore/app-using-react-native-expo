@@ -2,6 +2,7 @@ import { Image, StyleSheet } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { ThemedView } from "../ThemedView";
 import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 export interface Pokemon {
   abilities: string[];
@@ -14,9 +15,12 @@ export interface Pokemon {
 }
 
 const PokemonCard: React.FC<{ pokemon: Pokemon }> = ({ pokemon }) => {
+  const colorScheme = useColorScheme();
+
   return (
     <ThemedView
-      darkColor={Colors.common.gray300}
+      darkColor={Colors[colorScheme].accent300}
+      lightColor={Colors[colorScheme].accent300}
       style={styles.card}
     >
       <Image
@@ -27,28 +31,32 @@ const PokemonCard: React.FC<{ pokemon: Pokemon }> = ({ pokemon }) => {
         {pokemon.name.slice(0, 1).toUpperCase() + pokemon.name.slice(1)}
       </ThemedText>
       <ThemedView
-        darkColor={Colors.common.gray300}
+        darkColor={Colors[colorScheme].accent300}
+        lightColor={Colors[colorScheme].accent300}
         style={styles.cardRow}
       >
         <ThemedText fontWeight='fontMedium' style={styles.cardRowItem} type='textSm'>Type: </ThemedText>
         <ThemedText style={styles.cardRowItem} type='textSm'>{pokemon.type}</ThemedText>
       </ThemedView>
       <ThemedView
-        darkColor={Colors.common.gray300}
+        darkColor={Colors[colorScheme].accent300}
+        lightColor={Colors[colorScheme].accent300}
         style={styles.cardRow}
       >
         <ThemedText fontWeight='fontMedium' style={styles.cardRowItem} type='textSm'>Weight: </ThemedText>
         <ThemedText style={styles.cardRowItem} type='textSm'>{pokemon.weight} lbs</ThemedText>
       </ThemedView>
       <ThemedView
-        darkColor={Colors.common.gray300}
+        darkColor={Colors[colorScheme].accent300}
+        lightColor={Colors[colorScheme].accent300}
         style={styles.cardRow}
       >
         <ThemedText fontWeight='fontMedium' style={styles.cardRowItem} type='textSm'>Height: </ThemedText>
         <ThemedText style={styles.cardRowItem} type='textSm'>{pokemon.height * 10} cm</ThemedText>
       </ThemedView>
       <ThemedView
-        darkColor={Colors.common.gray300}
+        darkColor={Colors[colorScheme].accent300}
+        lightColor={Colors[colorScheme].accent300}
         style={{
           flexDirection: 'row',
         }}

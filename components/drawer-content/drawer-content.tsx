@@ -1,10 +1,12 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { router, usePathname } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuthStore } from "@/store/auth-store";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 interface DrawerContentProps {}
 
@@ -22,8 +24,8 @@ const DRAWER_CONTENT_TABS = [
     label: 'Reel',
   },
   {
-    href: '/wishlist',
-    label: 'Wishlist',
+    href: '/teddy',
+    label: 'Teddy',
   },
   {
     href: '/profile',
@@ -34,12 +36,14 @@ const DRAWER_CONTENT_TABS = [
 const DrawerContent: React.FC<DrawerContentProps> = () => {
   const pathname = usePathname();
   const { bottom } = useSafeAreaInsets();
+  const logout = useAuthStore((state) => state.logout);
+  const colorScheme = useColorScheme();
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: Colors.common.dark,
+        backgroundColor: Colors[colorScheme].background,
       }}
     >
       <DrawerContentScrollView>
@@ -53,9 +57,11 @@ const DrawerContent: React.FC<DrawerContentProps> = () => {
             <ThemedText
               style={{
                 paddingHorizontal: 24,
-                paddingVertical: 8,
+                paddingTop: 8,
+                paddingBottom: 16,
               }}
               fontWeight="fontBold"
+              type="textXl"
             >
               React Native App
             </ThemedText>
@@ -75,7 +81,7 @@ const DrawerContent: React.FC<DrawerContentProps> = () => {
                   style={[
                     styles.drawerContentTab,
                     {
-                      backgroundColor: pathname === tab.href ? Colors.common.green : Colors.common.gray300,
+                      backgroundColor: pathname === tab.href ? Colors.common.green : Colors[colorScheme].accent300,
                     }
                   ]}
                 >
@@ -86,11 +92,16 @@ const DrawerContent: React.FC<DrawerContentProps> = () => {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <ThemedText>{tab.label}</ThemedText>
+                    <ThemedText
+                      darkColor={pathname === tab.href ? Colors.common.white : Colors[colorScheme].tint}
+                      lightColor={pathname === tab.href ? Colors.common.white : Colors[colorScheme].tint}
+                    >
+                      {tab.label}
+                    </ThemedText>
                     <Ionicons
                       name={"chevron-forward"}
                       size={24}
-                      color={Colors.common.white}
+                      color={pathname === tab.href ? Colors.common.white : Colors[colorScheme].tint}
                     />
                   </View>
                 </TouchableOpacity>
@@ -99,35 +110,41 @@ const DrawerContent: React.FC<DrawerContentProps> = () => {
           </View>
         </View>
       </DrawerContentScrollView>
-      <View
-        style={{
-          backgroundColor: Colors.common.gray300,
-          marginBottom: bottom + 20,
-          paddingHorizontal: 24,
-          paddingVertical: 24,
-        }}
+      <TouchableWithoutFeedback
+        onPress={logout}
       >
         <View
           style={{
-            flexDirection: 'row',
-            gap: 16,
+            alignItems: 'center',
+            marginBottom: bottom + Platform.OS === 'android' ? 24 : 64,
           }}
         >
-          <ThemedText>Logout</ThemedText>
-          <Ionicons
-            name='log-out'
-            size={24}
-            color={Colors.common.white}
-          />
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 16,
+            }}
+          >
+            <ThemedText
+              darkColor={Colors.common.white}
+              lightColor={Colors.common.green}
+            >
+              Logout
+            </ThemedText>
+            <Ionicons
+              name='log-out'
+              size={24}
+              color={colorScheme === 'dark' ? Colors.common.white : Colors.common.green}
+            />
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   drawerContentTab: {
-    backgroundColor: 'gray',
     paddingHorizontal: 24,
     paddingVertical: 24,
   }

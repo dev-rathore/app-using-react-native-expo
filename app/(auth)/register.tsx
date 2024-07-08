@@ -1,8 +1,12 @@
 import AppLayout from "@/components/app-layout/app-layout";
+import PasswordTextInput from "@/components/text-input/password-text-input";
+import ThemedTextInput from "@/components/text-input/text-input";
+import ThemedButton from "@/components/themed-button/themed-button";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 import { useAuthStore } from "@/store/auth-store";
-import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -35,67 +39,45 @@ const Register: React.FC = () => {
 
   return (
     <AppLayout>
-      <View style={styles.container}>
-        <Text style={styles.title}>Register</Text>
-        {error && <Text style={styles.error}>{error}</Text>}
-        <TextInput
+      <ThemedView style={styles.container}>
+        <ThemedText style={styles.title} fontWeight="fontMedium">Register</ThemedText>
+        {error && <ThemedText style={styles.error}>{error}</ThemedText>}
+        <ThemedTextInput
           onChangeText={setName}
           onFocus={clearError}
           placeholder='Name'
-          placeholderTextColor={'grey'}
-          style={styles.input}
           value={name}
         />
-        <TextInput
+        <ThemedTextInput
           keyboardType='email-address'
           onChangeText={setEmail}
           onFocus={clearError}
           placeholder='Email'
-          placeholderTextColor={'grey'}
-          style={styles.input}
           value={email}
         />
-        <View style={styles.passwordInputContainer}>
-          <TextInput
-            onChangeText={setPassword}
-            onFocus={clearError}
-            placeholder="Enter your password"
-            placeholderTextColor={'grey'}
-            secureTextEntry={!isPasswordVisible}
-            style={styles.passwordInput}
-            value={password}
-          />
-          <TouchableWithoutFeedback onPress={togglePasswordVisibility} style={styles.toggleButton}>
-            <Ionicons
-              name={isPasswordVisible ? 'eye-off' : 'eye'}
-              size={20}
-              color="gray"
-            />
-          </TouchableWithoutFeedback>
-        </View>
-        <View style={styles.passwordInputContainer}>
-          <TextInput
-            onChangeText={setConfirmPassword}
-            onFocus={clearError}
-            placeholder="Confirm your password"
-            placeholderTextColor={'grey'}
-            secureTextEntry={!isConfirmPasswordVisible}
-            style={styles.passwordInput}
-            value={confirmPassword}
-          />
-          <TouchableWithoutFeedback onPress={toggleConfirmPasswordVisibility} style={styles.toggleButton}>
-            <Ionicons
-              name={isConfirmPasswordVisible ? 'eye-off' : 'eye'}
-              size={20}
-              color="gray"
-            />
-          </TouchableWithoutFeedback>
-        </View>
-        <Button
-          title='Register'
+        <PasswordTextInput
+          onChangeText={setPassword}
+          onFocus={clearError}
+          placeholder="Enter your password"
+          secureTextEntry={!isPasswordVisible}
+          value={password}
+          isPasswordVisible={isPasswordVisible}
+          togglePasswordVisibility={togglePasswordVisibility}
+        />
+        <PasswordTextInput
+          onChangeText={setConfirmPassword}
+          onFocus={clearError}
+          placeholder="Confirm your password"
+          secureTextEntry={!isConfirmPasswordVisible}
+          value={confirmPassword}
+          isPasswordVisible={isConfirmPasswordVisible}
+          togglePasswordVisibility={toggleConfirmPasswordVisibility}
+        />
+        <ThemedButton
+          label='Register'
           onPress={handleRegister}
         />
-      </View>
+      </ThemedView>
     </AppLayout>
   );
 };
@@ -114,31 +96,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   title: {
-    color: 'white',
     fontSize: 24,
     textAlign: "center",
-  },
-  input: {
-    borderColor: 'gray',
-    borderRadius: 4,
-    borderWidth: 1,
-    color: 'white',
-    padding: 8,
-  },
-  passwordInput: {
-    color: 'white',
-    flex: 1,
-    paddingVertical: 8,
-  },
-  passwordInputContainer: {
-    alignItems: 'center',
-    borderColor: 'gray',
-    borderRadius: 5,
-    borderWidth: 1,
-    flexDirection: 'row',
-    paddingHorizontal: 8,
-  },
-  toggleButton: {
-    padding: 5,
   },
 });

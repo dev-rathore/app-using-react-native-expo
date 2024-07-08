@@ -1,6 +1,8 @@
 import { Colors } from "@/constants/Colors";
+
 import { useState } from "react";
-import { StyleSheet, TextInput, TextInputProps } from "react-native";
+import { Platform, StyleSheet, TextInput, TextInputProps } from "react-native";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 interface ThemedTextInputProps extends TextInputProps {}
 
@@ -11,17 +13,20 @@ const ThemedTextInput:React.FC<ThemedTextInputProps> = ({
 
   const borderColor = isFocused ? Colors.common.yellow : Colors.common.gray;
 
+  const colorScheme = useColorScheme();
+
   return (
     <TextInput
       style={[
         styles.input,
         {
           borderColor,
+          color: Colors[colorScheme].tint,
         },
       ]}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
-      placeholderTextColor={'#EEEEEE'}
+      placeholderTextColor={Colors.common.gray}
       {...props}
     />
   );
@@ -31,12 +36,9 @@ export default ThemedTextInput;
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: Colors.common.gray300,
     borderRadius: 25,
     borderWidth: 1,
-    color: 'white',
-    marginBottom: 20,
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: Platform.OS === 'android' ? 8 : 14,
   },
 });
