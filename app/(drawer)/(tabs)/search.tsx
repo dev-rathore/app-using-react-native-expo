@@ -107,6 +107,7 @@ const TabTwoScreen: React.FC = () => {
             keyExtractor={(item) => item.name}
             numColumns={2}
             renderItem={({ item }) => <PokemonCard pokemon={item} />}
+            showsVerticalScrollIndicator={false}
           />
         )}
       </ThemedView>

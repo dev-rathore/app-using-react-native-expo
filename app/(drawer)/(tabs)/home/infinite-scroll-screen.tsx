@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, FlatList, Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { ThemedView } from '@/components/ThemedView';
 import AppLayout from '@/components/app-layout/app-layout';
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
+    paddingTop: Platform.OS === 'android' ? 0 : 16,
   },
   listContainer: {
     paddingBottom: 20,

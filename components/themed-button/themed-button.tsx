@@ -26,7 +26,7 @@ const ThemedButton: React.FC<ThemedButtonProps> = ({
           backgroundColor: Colors[colorScheme].tint,
           borderRadius: 25, 
           paddingHorizontal: 30,
-          paddingVertical: 10,
+          paddingVertical: Platform.OS === 'android' ? 8 : 14,
         }}
         {...props}
       >

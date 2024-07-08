@@ -5,8 +5,9 @@ import ThemedButton from "@/components/themed-button/themed-button";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useAuthStore } from "@/store/auth-store";
+import LottieView from "lottie-react-native";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -40,43 +41,67 @@ const Register: React.FC = () => {
   return (
     <AppLayout>
       <ThemedView style={styles.container}>
-        <ThemedText style={styles.title} fontWeight="fontMedium">Register</ThemedText>
-        {error && <ThemedText style={styles.error}>{error}</ThemedText>}
-        <ThemedTextInput
-          onChangeText={setName}
-          onFocus={clearError}
-          placeholder='Name'
-          value={name}
-        />
-        <ThemedTextInput
-          keyboardType='email-address'
-          onChangeText={setEmail}
-          onFocus={clearError}
-          placeholder='Email'
-          value={email}
-        />
-        <PasswordTextInput
-          onChangeText={setPassword}
-          onFocus={clearError}
-          placeholder="Enter your password"
-          secureTextEntry={!isPasswordVisible}
-          value={password}
-          isPasswordVisible={isPasswordVisible}
-          togglePasswordVisibility={togglePasswordVisibility}
-        />
-        <PasswordTextInput
-          onChangeText={setConfirmPassword}
-          onFocus={clearError}
-          placeholder="Confirm your password"
-          secureTextEntry={!isConfirmPasswordVisible}
-          value={confirmPassword}
-          isPasswordVisible={isConfirmPasswordVisible}
-          togglePasswordVisibility={toggleConfirmPasswordVisibility}
-        />
-        <ThemedButton
-          label='Register'
-          onPress={handleRegister}
-        />
+        <ThemedView
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+          }}
+        >
+          <LottieView
+            source={require('@/assets/animations/thinking-robot.json')}
+            autoPlay
+            style={{
+              width: '100%',
+              height: 300,
+            }}
+            loop
+          />
+        </ThemedView>
+        <KeyboardAvoidingView behavior="padding"
+          style={{
+            gap: 16,
+            marginBottom: Platform.OS === 'android' ? 20 : 40,
+          }}
+        >
+          <ThemedText style={styles.title} fontWeight="fontMedium">Register</ThemedText>
+          {error && <ThemedText style={styles.error}>{error}</ThemedText>}
+          <ThemedTextInput
+            onChangeText={setName}
+            onFocus={clearError}
+            placeholder='Name'
+            value={name}
+          />
+          <ThemedTextInput
+            keyboardType='email-address'
+            onChangeText={setEmail}
+            onFocus={clearError}
+            placeholder='Email'
+            value={email}
+          />
+          <PasswordTextInput
+            onChangeText={setPassword}
+            onFocus={clearError}
+            placeholder="Enter your password"
+            secureTextEntry={!isPasswordVisible}
+            value={password}
+            isPasswordVisible={isPasswordVisible}
+            togglePasswordVisibility={togglePasswordVisibility}
+          />
+          <PasswordTextInput
+            onChangeText={setConfirmPassword}
+            onFocus={clearError}
+            placeholder="Confirm your password"
+            secureTextEntry={!isConfirmPasswordVisible}
+            value={confirmPassword}
+            isPasswordVisible={isConfirmPasswordVisible}
+            togglePasswordVisibility={toggleConfirmPasswordVisibility}
+          />
+          <ThemedButton
+            alignSelf="stretch"
+            label='Register'
+            onPress={handleRegister}
+          />
+        </KeyboardAvoidingView>
       </ThemedView>
     </AppLayout>
   );
@@ -88,7 +113,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: 16,
-    justifyContent: 'center',
     padding: 16,
   },
   error: {

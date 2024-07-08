@@ -11,10 +11,10 @@ const DrawerLayout = () => {
       }}
     >
       <Drawer.Screen
-        name="wishlist"
+        name="teddy"
         options={{
           headerShown: true,
-          title: 'Wishlist',
+          title: 'Teddy',
         }}
       />
       <Drawer.Screen
