@@ -20,9 +20,6 @@ export function ThemedView({ style, lightColor, darkColor, ...otherProps }: Them
     darkColor = Colors[colorScheme].background;
   }
 
-  console.log('ThemedView', Platform.OS, colorScheme, lightColor, darkColor);
-  
-
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
 
   return <View style={[{ backgroundColor }, style]} {...otherProps} />;
