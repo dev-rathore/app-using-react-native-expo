@@ -1,3 +1,5 @@
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { KeyboardAvoidingView, Keyboard, Platform, StyleSheet, Animated } from "react-native";
 import AppLayout from "@/components/app-layout/app-layout";
 import PasswordTextInput from "@/components/text-input/password-text-input";
 import ThemedTextInput from "@/components/text-input/text-input";
@@ -6,8 +8,6 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useAuthStore } from "@/store/auth-store";
 import LottieView from "lottie-react-native";
-import { useState } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -16,52 +16,89 @@ const Register: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const translateY = useRef(new Animated.Value(0)).current;
+  const opacity = useRef(new Animated.Value(1)).current;
 
   const register = useAuthStore((state) => state.register);
   const error = useAuthStore((state) => state.error);
   const clearError = useAuthStore((state) => state.clearError);
 
-  const toggleConfirmPasswordVisibility = () => {
-    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
-  };
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardVisible(true);
+        Animated.timing(translateY, {
+          toValue: -200,
+          duration: 300,
+          useNativeDriver: true,
+        }).start(() => {
+          Animated.timing(opacity, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true,
+          }).start();
+        });
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 100,
+          useNativeDriver: true,
+        }).start(() => {
+          Animated.timing(translateY, {
+            toValue: 0,
+            duration: 100,
+            useNativeDriver: true,
+          }).start();
+          setIsKeyboardVisible(false);
+        });
+      }
+    );
 
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible(!isPasswordVisible);
-  };
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, [translateY, opacity]);
 
-  const handleRegister = async () => {
+  const togglePasswordVisibility = useCallback(() => {
+    setIsPasswordVisible((prevState) => !prevState);
+  }, []);
+
+  const toggleConfirmPasswordVisibility = useCallback(() => {
+    setIsConfirmPasswordVisible((prevState) => !prevState);
+  }, []);
+
+  const handleRegister = useCallback(async () => {
     if (password !== confirmPassword) {
       useAuthStore.setState({ error: 'Passwords do not match' });
       return;
     }
 
     await register(name, email, password);
-  };
+  }, [name, email, password, confirmPassword, register]);
 
   return (
     <AppLayout>
       <ThemedView style={styles.container}>
-        <ThemedView
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-          }}
-        >
-          <LottieView
-            source={require('@/assets/animations/thinking-robot.json')}
-            autoPlay
-            style={{
-              width: '100%',
-              height: 300,
-            }}
-            loop
-          />
-        </ThemedView>
-        <KeyboardAvoidingView behavior="padding"
-          style={{
-            gap: 16,
-            marginBottom: Platform.OS === 'android' ? 20 : 40,
-          }}
+        {!isKeyboardVisible && (
+          <Animated.View style={[styles.lottieContainer, { transform: [{ translateY }], opacity }]}>
+            <LottieView
+              source={require('@/assets/animations/thinking-robot.json')}
+              autoPlay
+              style={styles.lottie}
+              loop
+            />
+          </Animated.View>
+        )}
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={styles.keyboardAvoidingView}
         >
           <ThemedText style={styles.title} fontWeight="fontMedium">Register</ThemedText>
           {error && <ThemedText style={styles.error}>{error}</ThemedText>}
@@ -115,12 +152,24 @@ const styles = StyleSheet.create({
     gap: 16,
     padding: 16,
   },
-  error: {
-    color: 'red',
-    textAlign: 'center',
+  lottieContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  lottie: {
+    width: '100%',
+    height: 300,
+  },
+  keyboardAvoidingView: {
+    gap: 16,
+    marginBottom: Platform.OS === 'android' ? 20 : 40,
   },
   title: {
     fontSize: 24,
     textAlign: "center",
+  },
+  error: {
+    color: 'red',
+    textAlign: 'center',
   },
 });
