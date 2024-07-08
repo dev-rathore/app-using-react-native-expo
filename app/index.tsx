@@ -4,11 +4,16 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
 import LottieView from "lottie-react-native";
-import { Platform, StyleSheet } from "react-native";
+import {
+  // LogBox,
+  Platform,
+  StyleSheet,
+} from "react-native";
+
+// LogBox.ignoreAllLogs();
 
 const GetStarted: React.FC = () => {
   const router = useRouter();
-
   return (
     <AppLayout>
       <ThemedView style={styles.container}>
