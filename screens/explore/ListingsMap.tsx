@@ -57,8 +57,8 @@ const ListingsMap = memo(({ listings }: Props) => {
       <Marker
         key={`cluster-${id}`}
         coordinate={{
-          longitude: geometry.coordinates[0],
-          latitude: geometry.coordinates[1],
+          longitude: parseFloat(geometry.coordinates[0]),
+          latitude: parseFloat(geometry.coordinates[1]),
         }}
         onPress={onPress}>
         <View style={styles.marker}>
@@ -89,8 +89,8 @@ const ListingsMap = memo(({ listings }: Props) => {
         {listings.features.map((item: any) => (
           <Marker
             coordinate={{
-              latitude: item.properties.latitude,
-              longitude: item.properties.longitude,
+              latitude: parseFloat(item.properties.latitude),
+              longitude: parseFloat(item.properties.longitude),
             }}
             key={item.properties.id}
             onPress={() => onMarkerSelected(item)}>
