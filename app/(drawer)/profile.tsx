@@ -1,7 +1,7 @@
 import AppLayout from "@/components/app-layout/app-layout";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { auth } from '@/config/firebase';
+import { FirebaseAuth } from '@/utils/firebase/auth';
 import { getUserProfile } from '@/services/user-service';
 import LottieView from "lottie-react-native";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const profileData = await getUserProfile(auth.currentUser?.uid || '');
+        const profileData = await getUserProfile(FirebaseAuth.currentUser?.uid || '');
         setProfile(profileData);
       } catch (error: any) {
         Alert.alert('Error', error.message);

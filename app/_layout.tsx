@@ -23,6 +23,7 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
   const router = useRouter();
+  const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
     if (loaded) {
@@ -42,7 +43,7 @@ export default function RootLayout() {
     };
 
     checkToken();
-  }, []);
+  }, [token]);
 
   if (!loaded) {
     return null;

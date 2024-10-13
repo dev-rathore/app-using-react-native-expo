@@ -20,21 +20,23 @@ import { z } from "zod";
 import { FirebaseAuth, FirestoreDB } from "@/utils/firebase";
 
 interface AuthState {
-  user: any;
-  token: string | null;
+  clearError: () => void;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  loginError: string | null;
   logout: () => Promise<void>;
-  clearError: () => void;
+  register: (name: string, email: string, password: string) => Promise<void>;
+  registerError: string | null;
+  token: string | null;
+  user: any;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      user: null,
-      token: null,
       error: null,
+      loginError: null,
+      registerError: null,
       login: async (email, password) => {
         try {
           emailSchema.parse(email); // Validate email using Zod
@@ -47,7 +49,7 @@ export const useAuthStore = create<AuthState>()(
           );
           const token = await userCredential.user.getIdToken();
           await AsyncStorage.setItem("token", token);
-          set({ user: userCredential.user, token, error: null });
+          set({ user: userCredential.user, token, loginError: null });
 
           router.replace("/(drawer)/(tabs)/home");
         } catch (error: any) {
@@ -55,9 +57,9 @@ export const useAuthStore = create<AuthState>()(
             const errorMessage = error.errors
               .map((err) => err.message)
               .join("\n");
-            set({ error: errorMessage });
+            set({ loginError: errorMessage });
           } else {
-            set({ error: error.message });
+            set({ loginError: error.message });
           }
         }
       },
@@ -91,7 +93,7 @@ export const useAuthStore = create<AuthState>()(
             email,
           });
 
-          set({ user: userCredential.user, token, error: null });
+          set({ user: userCredential.user, token, registerError: null });
 
           router.push("/(auth)/login");
         } catch (error: any) {
@@ -99,9 +101,9 @@ export const useAuthStore = create<AuthState>()(
             const errorMessage = error.errors
               .map((err) => err.message)
               .join("\n");
-            set({ error: errorMessage });
+            set({ registerError: errorMessage });
           } else {
-            set({ error: error.message });
+            set({ registerError: error.message });
           }
         }
       },
@@ -117,8 +119,10 @@ export const useAuthStore = create<AuthState>()(
         }
       },
       clearError: () => {
-        set({ error: null });
+        set({ error: null, loginError: null, registerError: null });
       },
+      token: null,
+      user: null,
     }),
     {
       name: "auth",

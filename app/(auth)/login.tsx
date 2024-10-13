@@ -18,7 +18,7 @@ const Login: React.FC = () => {
   const opacity = useRef(new Animated.Value(1)).current;
 
   const login = useAuthStore((state) => state.login);
-  const error = useAuthStore((state) => state.error);
+  const loginError = useAuthStore((state) => state.loginError);
   const clearError = useAuthStore((state) => state.clearError);
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const Login: React.FC = () => {
           style={styles.keyboardAvoidingView}
         >
           <ThemedText style={styles.title} fontWeight="fontMedium">Login</ThemedText>
-          {error && <ThemedText style={styles.error}>{error}</ThemedText>}
+          {loginError && <ThemedText style={styles.loginError}>{loginError}</ThemedText>}
           <ThemedTextInput
             keyboardType='email-address'
             onChangeText={setEmail}
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: "center",
   },
-  error: {
+  loginError: {
     color: 'red',
     textAlign: 'center',
   },

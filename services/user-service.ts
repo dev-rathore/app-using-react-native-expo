@@ -1,9 +1,9 @@
-import { db } from '../config/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { FirestoreDB } from "@/utils/firebase/db";
+import { doc, getDoc } from "firebase/firestore";
 
 export const getUserProfile = async (userId: string) => {
   try {
-    const userDocRef = doc(db, 'users', userId);
+    const userDocRef = doc(FirestoreDB, "users", userId);
     const userDocSnapshot = await getDoc(userDocRef);
 
     if (userDocSnapshot.exists()) {
@@ -14,10 +14,10 @@ export const getUserProfile = async (userId: string) => {
       }
       return userData;
     } else {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
   } catch (error) {
-    console.error('Error fetching user profile:', error);
+    console.error("Error fetching user profile:", error);
     throw error;
   }
 };

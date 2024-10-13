@@ -21,7 +21,7 @@ const Register: React.FC = () => {
   const opacity = useRef(new Animated.Value(1)).current;
 
   const register = useAuthStore((state) => state.register);
-  const error = useAuthStore((state) => state.error);
+  const registerError = useAuthStore((state) => state.registerError);
   const clearError = useAuthStore((state) => state.clearError);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const Register: React.FC = () => {
 
   const handleRegister = useCallback(async () => {
     if (password !== confirmPassword) {
-      useAuthStore.setState({ error: 'Passwords do not match' });
+      useAuthStore.setState({ registerError: 'Passwords do not match' });
       return;
     }
 
@@ -101,7 +101,7 @@ const Register: React.FC = () => {
           style={styles.keyboardAvoidingView}
         >
           <ThemedText style={styles.title} fontWeight="fontMedium">Register</ThemedText>
-          {error && <ThemedText style={styles.error}>{error}</ThemedText>}
+          {registerError && <ThemedText style={styles.registerError}>{registerError}</ThemedText>}
           <ThemedTextInput
             onChangeText={setName}
             onFocus={clearError}
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: "center",
   },
-  error: {
+  registerError: {
     color: 'red',
     textAlign: 'center',
   },
