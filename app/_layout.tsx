@@ -31,6 +31,7 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  // TODO: Fix initial screen rendering
   useEffect(() => {
     const checkToken = async () => {
       const storedToken = await AsyncStorage.getItem('token');
