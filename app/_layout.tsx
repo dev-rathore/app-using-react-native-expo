@@ -2,7 +2,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -22,31 +22,35 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+  const [appIsReady, setAppIsReady] = useState(false);
   const router = useRouter();
   const token = useAuthStore((state) => state.token);
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  // TODO: Fix initial screen rendering
-  useEffect(() => {
-    const checkToken = async () => {
+  const checkToken = async () => {
+    try {
       const storedToken = await AsyncStorage.getItem('token');
+
       if (storedToken) {
         useAuthStore.setState({ token: storedToken });
-        router.replace('/(drawer)/(tabs)/home');
-      } else {
-        router.replace('/');
       }
-    };
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      setAppIsReady(true);
+    }
+  };
 
+  useEffect(() => {
     checkToken();
-  }, [token]);
+  }, []);
 
-  if (!loaded) {
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady && loaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady, loaded]);
+
+  if (!appIsReady || !loaded) {
     return null;
   }
 
@@ -56,6 +60,7 @@ export default function RootLayout() {
         style={{
           flex: 1,
         }}
+        onLayout={onLayoutRootView}
       >
         <Stack
           screenOptions={{
@@ -65,7 +70,7 @@ export default function RootLayout() {
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
-          <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+          <Stack.Screen name="(main)" options={{ headerShown: false }} />
           <Stack.Screen name="listing/[id]" options={{ headerTitle: '' }} />
           <Stack.Screen
             name="(modals)/booking"
