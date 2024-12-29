@@ -42,7 +42,14 @@ const DetailsPage = () => {
         <Animated.View style={[headerAnimatedStyle, styles.header]}></Animated.View>
       ),
       headerRight: () => (
-        <View style={styles.bar}>
+        <View
+          style={[
+            styles.bar,
+            {
+              marginRight: 16,
+            },
+          ]}
+        >
           <TouchableOpacity style={styles.roundButton} onPress={shareListing}>
             <Ionicons name="share-outline" size={22} color={'#000'} />
           </TouchableOpacity>
@@ -52,7 +59,15 @@ const DetailsPage = () => {
         </View>
       ),
       headerLeft: () => (
-        <TouchableOpacity style={styles.roundButton} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={[
+            styles.roundButton,
+            {
+              marginLeft: 16,
+            },
+          ]}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="chevron-back" size={24} color={'#000'} />
         </TouchableOpacity>
       ),

@@ -1,5 +1,4 @@
 import { Stack } from 'expo-router';
-import 'react-native-reanimated';
 
 const HomeLayout = () => {
   return (
@@ -15,7 +14,7 @@ const HomeLayout = () => {
         }}
       />
       <Stack.Screen
-        name="infinite-scroll-screen"
+        name="infinite-scroll"
         options={{
           headerBackTitleVisible: false,
           title: 'Infinite Scroll',

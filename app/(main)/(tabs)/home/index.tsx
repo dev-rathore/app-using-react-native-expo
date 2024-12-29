@@ -37,7 +37,7 @@ const HOME_SCREEN_NAV_ITEMS = [
   },
 ];
 
-const HomeScreen:React.FC<HomeScreenProps> = () => {
+const HomeScreen: React.FC<HomeScreenProps> = () => {
   const [selectedNavItem, setSelectedNavItem] = useState<string>('All');
   const colorScheme = useColorScheme();
 
@@ -124,13 +124,20 @@ const HomeScreen:React.FC<HomeScreenProps> = () => {
           style={{
             paddingTop: 16,
             paddingBottom: 32,
+            gap: 16,
           }}
         >
           <ThemedTouchableHighlight
-            onPress={() => router.push("/(tabs)/home/infinite-scroll-screen")}
+            onPress={() => router.push("/(tabs)/home/infinite-scroll")}
             alignSelf='center'
           >
             Infinite Scroll Screen
+          </ThemedTouchableHighlight>
+          <ThemedTouchableHighlight
+            onPress={() => router.push("/(tabs)/home/counter")}
+            alignSelf='center'
+          >
+            Counter Screen
           </ThemedTouchableHighlight>
         </ThemedView>
       </ScrollView>

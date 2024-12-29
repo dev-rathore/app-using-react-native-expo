@@ -1,30 +1,25 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Slot, Stack, usePathname, useRouter, useSegments } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
-import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useCallback, useEffect, useState } from 'react';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import 'react-native-reanimated';
+import 'react-native-gesture-handler';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Platform, TouchableOpacity } from 'react-native';
 import { useAuthStore } from '@/store/auth-store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import ModalHeaderText from '@/screens/explore/ModalHeaderText';
-import { Colors } from '@/constants/Colors';
-import { Ionicons } from '@expo/vector-icons';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+const RootLayoutStack = () => {
   const [appIsReady, setAppIsReady] = useState(false);
-  const router = useRouter();
   const token = useAuthStore((state) => state.token);
+
+  const segments = useSegments();
+  const router = useRouter();
 
   const checkToken = async () => {
     try {
@@ -41,64 +36,78 @@ export default function RootLayout() {
   };
 
   useEffect(() => {
-    checkToken();
-  }, []);
-
-  const onLayoutRootView = useCallback(async () => {
-    if (appIsReady && loaded) {
-      await SplashScreen.hideAsync();
+    if (!appIsReady) {
+      checkToken();
+      return;
     }
-  }, [appIsReady, loaded]);
 
-  if (!appIsReady || !loaded) {
+    // const inAuthGroup = segments[0] === "(auth)";
+    // const inMainGroup = segments[0] === "(main)";
+
+    if (token) {
+      setTimeout(() => {
+        router.replace("/(main)/(tabs)/home");
+      }, 3000);
+    } else if (!token) {
+      setTimeout(() => {
+        router.replace("/(auth)/get-started");
+      }, 3000);
+    }
+  }, [token, appIsReady]);
+
+  return (
+    <Stack>
+      <Stack.Screen
+        name="(main)"
+        options={{ headerShown: false }}
+      // redirect={!!token}
+      />
+      <Stack.Screen
+        name="index"
+        options={{ headerShown: false }}
+      // redirect={!!token}
+      />
+      <Stack.Screen
+        name="(modals)"
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        name="(auth)"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(public)"
+        options={{ headerShown: false }}
+      />
+    </Stack>
+  )
+};
+
+export default function RootLayout() {
+  const colorScheme = useColorScheme();
+  const [loaded] = useFonts({
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  });
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
     return null;
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <GestureHandlerRootView
-        style={{
-          flex: 1,
-        }}
-        onLayout={onLayoutRootView}
-      >
-        <Stack
-          screenOptions={{
-            animation: 'ios',
-          }}
-        >
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
-          <Stack.Screen name="(main)" options={{ headerShown: false }} />
-          <Stack.Screen name="listing/[id]" options={{ headerTitle: '' }} />
-          <Stack.Screen
-            name="(modals)/booking"
-            options={{
-              presentation: 'transparentModal',
-              animation: 'fade',
-              headerTransparent: true,
-              headerTitle: (props) => <ModalHeaderText />,
-              headerLeft: () => (
-                Platform.OS === 'ios' && (
-                  <TouchableOpacity
-                    onPress={() => router.back()}
-                    style={{
-                      backgroundColor: '#fff',
-                      borderColor: Colors.common.gray,
-                      borderRadius: 20,
-                      borderWidth: 1,
-                      padding: 4,
-                    }}
-                  >
-                    <Ionicons name="close-outline" size={22} />
-                  </TouchableOpacity>
-                )
-              ),
-            }}
-          />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+    <ThemeProvider
+      value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+    >
+      <GestureHandlerRootView>
+        <RootLayoutStack />
       </GestureHandlerRootView>
     </ThemeProvider>
   );

@@ -51,7 +51,7 @@ export const useAuthStore = create<AuthState>()(
           await AsyncStorage.setItem("token", token);
           set({ user: userCredential.user, token, loginError: null });
 
-          router.replace("/(drawer)/(tabs)/home");
+          router.replace("/(main)/(tabs)/home");
         } catch (error: any) {
           if (error instanceof z.ZodError) {
             const errorMessage = error.errors
@@ -113,7 +113,7 @@ export const useAuthStore = create<AuthState>()(
           await AsyncStorage.removeItem("token");
           set({ user: null, token: null, error: null });
 
-          router.replace("/");
+          router.replace("/(auth)/get-started");
         } catch (error: any) {
           set({ error: error.message });
         }

@@ -6,10 +6,13 @@ const DrawerLayout = () => {
     <Drawer
       backBehavior="history"
       drawerContent={(props) => <DrawerContent {...props} />}
-      screenOptions={{
-        headerShown: false,
-      }}
     >
+      <Drawer.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
       <Drawer.Screen
         name="teddy"
         options={{
@@ -22,6 +25,12 @@ const DrawerLayout = () => {
         options={{
           headerShown: true,
           title: 'Profile',
+        }}
+      />
+      <Drawer.Screen
+        name="listing/[id]"
+        options={{
+          headerTitle: ''
         }}
       />
     </Drawer>
